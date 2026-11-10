@@ -1,0 +1,23 @@
+const axios = require('axios');
+
+async function initiateMpesaPayment(phoneNumber, amount = 85) {
+    const url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
+    const auth = "Bearer " + YOUR_ACCESS_TOKEN; // Generated from your Consumer Key/Secret
+
+    const data = {
+        "BusinessShortCode": "174379", // Your Paybill/Till number
+        "Password": "YOUR_ENCODED_PASSWORD",
+        "Timestamp": "20231027103000",
+        "TransactionType": "CustomerPayBillOnline",
+        "Amount": amount,
+        "PartyA": phoneNumber, // The user's phone number
+        "PartyB": "174379",
+        "PhoneNumber": phoneNumber,
+        "CallBackURL": "https://yourdomain.com/callback", // Where M-Pesa sends the success status
+        "AccountReference": "ChatAppAccess",
+        "TransactionDesc": "Access to foreign chat"
+    };
+
+    const response = await axios.post(url, data, { headers: { Authorization: auth } });
+    return response.data;
+}
